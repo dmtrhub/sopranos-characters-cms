@@ -1,0 +1,24 @@
+# Visual Studio and IDE cache
+.vs/
+.vscode/
+*.user
+*.suo
+*.sln.docstates
+
+# Build output
+bin/
+obj/
+Debug/
+Release/
+
+# NuGet
+packages/
+.nuget/
+
+# ReSharper
+.idea/
+*.DotSettings.user
+
+# OS files
+.DS_Store
+Thumbs.db
