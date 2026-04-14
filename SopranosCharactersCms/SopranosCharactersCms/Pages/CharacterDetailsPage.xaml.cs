@@ -34,7 +34,9 @@ namespace SopranosCharactersCms.Pages
             RoleStatusTextBlock.Text = string.Format(CultureInfo.InvariantCulture, "{0} \\ New Jersey", string.IsNullOrWhiteSpace(_character.Role) ? "Active Member" : _character.Role);
             DescriptionTextBlock.Text = _mainWindow.DataService.LoadRtfAsPlainText(_character.RtfPath);
             CharacterImage.Source = new RelativeImagePathToBitmapConverter().Convert(_character.ImagePath, typeof(ImageSource), null, CultureInfo.InvariantCulture) as ImageSource;
-            EditButton.Visibility = _currentUser.Role == UserRole.Admin ? Visibility.Visible : Visibility.Collapsed;
+            Visibility editVisibility = _currentUser.Role == UserRole.Admin && !_closeOnBack ? Visibility.Visible : Visibility.Collapsed;
+            EditButton.Visibility = editVisibility;
+            EditButtonBorder.Visibility = editVisibility;
         }
 
         private string GetAddedDateOnly()

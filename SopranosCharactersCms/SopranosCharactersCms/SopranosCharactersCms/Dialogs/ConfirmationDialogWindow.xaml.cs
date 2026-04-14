@@ -1,12 +1,15 @@
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
+using System.Windows.Media.Effects;
 
 namespace SopranosCharactersCms.Dialogs
 {
     public partial class ConfirmationDialogWindow : Window
     {
-        public ConfirmationDialogWindow(Window owner, string title, string message, string confirmText, bool isDanger, bool showCancel)
+        private Effect _ownerPreviousEffect;
+
+        public ConfirmationDialogWindow(Window owner, string title, string message, string confirmText, bool isDanger, bool showCancel, bool centerMessage = false)
         {
             Owner = owner;
             Width = owner.ActualWidth;
@@ -77,7 +80,7 @@ namespace SopranosCharactersCms.Dialogs
                 FontWeight = FontWeights.Regular,
                 FontSize = 14,
                 Foreground = messageBrush,
-                TextAlignment = showCancel ? TextAlignment.Left : TextAlignment.Center
+                TextAlignment = centerMessage ? TextAlignment.Center : (showCancel ? TextAlignment.Left : TextAlignment.Center)
             };
             Canvas.SetLeft(messageText, 20);
             Canvas.SetTop(messageText, 90);
@@ -125,6 +128,30 @@ namespace SopranosCharactersCms.Dialogs
             card.Child = canvas;
             root.Children.Add(card);
             Content = root;
+
+            Loaded += ConfirmationDialogWindow_Loaded;
+            Closed += ConfirmationDialogWindow_Closed;
+        }
+
+        private void ConfirmationDialogWindow_Loaded(object sender, RoutedEventArgs e)
+        {
+            if (Owner == null)
+            {
+                return;
+            }
+
+            _ownerPreviousEffect = Owner.Effect;
+            Owner.Effect = new BlurEffect { Radius = 8 };
+        }
+
+        private void ConfirmationDialogWindow_Closed(object sender, System.EventArgs e)
+        {
+            if (Owner == null)
+            {
+                return;
+            }
+
+            Owner.Effect = _ownerPreviousEffect;
         }
 
         private static Button BuildFlatButton(string content, Brush foreground, double fontSize, Brush normalBackground, Brush hoverBackground)

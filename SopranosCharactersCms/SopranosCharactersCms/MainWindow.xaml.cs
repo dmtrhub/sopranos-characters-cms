@@ -7,14 +7,20 @@ using System.ComponentModel;
 using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Navigation;
+using System.Windows.Media.Effects;
 
 namespace SopranosCharactersCms
 {
     public partial class MainWindow : Window
     {
+        private bool _isFullscreen;
+
         public MainWindow()
         {
             InitializeComponent();
+
+            EnterFullscreen();
+            PreviewKeyDown += MainWindow_PreviewKeyDown;
 
             DataService = new AppDataService();
             DataService.EnsureAppData();
@@ -22,6 +28,41 @@ namespace SopranosCharactersCms
             Characters = DataService.LoadCharacters();
 
             NavigateToLogin();
+        }
+
+        private void MainWindow_PreviewKeyDown(object sender, System.Windows.Input.KeyEventArgs e)
+        {
+            if (e.Key != System.Windows.Input.Key.F11)
+            {
+                return;
+            }
+
+            if (_isFullscreen)
+            {
+                ExitFullscreen();
+            }
+            else
+            {
+                EnterFullscreen();
+            }
+
+            e.Handled = true;
+        }
+
+        private void EnterFullscreen()
+        {
+            _isFullscreen = true;
+            WindowStyle = WindowStyle.None;
+            ResizeMode = ResizeMode.NoResize;
+            WindowState = WindowState.Maximized;
+        }
+
+        private void ExitFullscreen()
+        {
+            _isFullscreen = false;
+            WindowState = WindowState.Normal;
+            WindowStyle = WindowStyle.SingleBorderWindow;
+            ResizeMode = ResizeMode.CanResize;
         }
 
         public AppDataService DataService { get; }
@@ -78,15 +119,12 @@ namespace SopranosCharactersCms
             {
                 Owner = this,
                 Title = "Character Details",
-                Width = 1920,
-                Height = 1080,
-                MinWidth = 1920,
-                MinHeight = 1080,
-                MaxWidth = 1920,
-                MaxHeight = 1080,
+                Width = ActualWidth,
+                Height = ActualHeight,
                 WindowStyle = WindowStyle.None,
                 ResizeMode = ResizeMode.NoResize,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
+                WindowState = WindowState.Maximized,
                 Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#0A0A0A"),
                 Content = new Frame
                 {
@@ -95,7 +133,16 @@ namespace SopranosCharactersCms
                 }
             };
 
-            detailsWindow.ShowDialog();
+            var previousEffect = Effect;
+            Effect = new BlurEffect { Radius = 8 };
+            try
+            {
+                detailsWindow.ShowDialog();
+            }
+            finally
+            {
+                Effect = previousEffect;
+            }
         }
 
         public void SaveCharacters()
@@ -116,7 +163,7 @@ namespace SopranosCharactersCms
 
         public bool ShowExitConfirmation()
         {
-            ConfirmationDialogWindow dialog = new ConfirmationDialogWindow(this, "Exit Application", "Are you sure you want to close the application?", "Exit", isDanger: false, showCancel: true);
+            ConfirmationDialogWindow dialog = new ConfirmationDialogWindow(this, "Exit Application", "Are you sure you want to close the application?", "Exit", isDanger: false, showCancel: true, centerMessage: true);
             return dialog.ShowDialog() == true;
         }
 

@@ -32,13 +32,13 @@
                        FontSize="12"
                        Foreground="#8B8985"/>
 
-            <Border Canvas.Left="40" Canvas.Top="160" Width="200" Height="350" CornerRadius="6" Background="#2A2A2A" BorderBrush="#4F4F4F" BorderThickness="2">
+            <Border Canvas.Left="40" Canvas.Top="160" Width="260" Height="400" CornerRadius="6" Background="#2A2A2A" BorderBrush="#4F4F4F" BorderThickness="2">
                 <Image x:Name="CharacterImage" Stretch="UniformToFill"/>
             </Border>
 
             <TextBlock x:Name="RoleStatusTextBlock"
                        Canvas.Left="40"
-                       Canvas.Top="530"
+                       Canvas.Top="580"
                        FontFamily="Segoe UI"
                        FontWeight="Regular"
                        FontSize="12"
@@ -105,7 +105,7 @@
                         Click="BackButton_Click"/>
             </Border>
 
-            <Border Canvas.Left="570" Canvas.Top="960" Width="200" Height="48" CornerRadius="6" BorderThickness="1">
+            <Border x:Name="EditButtonBorder" Canvas.Left="570" Canvas.Top="960" Width="200" Height="48" CornerRadius="6" BorderThickness="1">
                 <Border.Style>
                     <Style TargetType="Border">
                         <Setter Property="Background" Value="#7A1E1E"/>

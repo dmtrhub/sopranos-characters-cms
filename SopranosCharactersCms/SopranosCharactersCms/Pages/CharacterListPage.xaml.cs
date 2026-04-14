@@ -30,6 +30,8 @@ namespace SopranosCharactersCms.Pages
 
         public double HeaderTextTop => IsAdmin ? 254 : 174;
 
+        public double HeaderIconTop => HeaderTextTop + 3;
+
         public double HeaderSelectTop => IsAdmin ? 252 : 172;
 
         public double RowsTop => IsAdmin ? 300 : 220;

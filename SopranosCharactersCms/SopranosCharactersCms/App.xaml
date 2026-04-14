@@ -1,6 +1,7 @@
 ﻿<Application x:Class="SopranosCharactersCms.App"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:sys="clr-namespace:System;assembly=mscorlib"
              xmlns:converters="clr-namespace:SopranosCharactersCms.Converters"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
@@ -16,6 +17,17 @@
         <SolidColorBrush x:Key="DangerPrimaryBrush" Color="#D65C5C"/>
         <SolidColorBrush x:Key="BorderPrimaryBrush" Color="#4F4F4F"/>
         <SolidColorBrush x:Key="ErrorPrimaryBrush" Color="#D65C5C"/>
+
+        <FontFamily x:Key="BodyFontFamily">Segoe UI</FontFamily>
+        <FontFamily x:Key="HeadingFontFamily">Oswald</FontFamily>
+        <FontFamily x:Key="IconFontFamily">Segoe MDL2 Assets</FontFamily>
+
+        <sys:String x:Key="IconCharacterGlyph">&#xE8D2;</sys:String>
+        <sys:String x:Key="IconRoleGlyph">&#xE77B;</sys:String>
+        <sys:String x:Key="IconImageGlyph">&#xE91B;</sys:String>
+        <sys:String x:Key="IconAddedGlyph">&#xE787;</sys:String>
+        <sys:String x:Key="IconActionsGlyph">&#xE71D;</sys:String>
+        <sys:String x:Key="IconViewGlyph">&#xE890;</sys:String>
 
         <Style x:Key="NoBlueButtonBaseStyle" TargetType="Button">
             <Setter Property="FocusVisualStyle" Value="{x:Null}"/>

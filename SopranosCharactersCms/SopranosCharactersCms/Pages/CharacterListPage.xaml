@@ -39,9 +39,34 @@
 
         <Style x:Key="HeaderTextStyle" TargetType="TextBlock">
             <Setter Property="Foreground" Value="#F5E6C8"/>
-            <Setter Property="FontFamily" Value="Segoe UI"/>
+            <Setter Property="FontFamily" Value="{StaticResource BodyFontFamily}"/>
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="FontSize" Value="14"/>
+            <Setter Property="VerticalAlignment" Value="Center"/>
+        </Style>
+
+        <Style x:Key="CharacterNameHyperlinkStyle" TargetType="TextBlock">
+            <Setter Property="Foreground" Value="#C8A96B"/>
+            <Setter Property="FontFamily" Value="{StaticResource BodyFontFamily}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontSize" Value="20"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="TextDecorations" Value="Underline"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#F2C94C"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="ActionHyperlinkStyle" TargetType="TextBlock" BasedOn="{StaticResource CharacterNameHyperlinkStyle}">
+            <Setter Property="FontWeight" Value="Regular"/>
+        </Style>
+
+        <Style x:Key="HeaderIconStyle" TargetType="TextBlock">
+            <Setter Property="FontFamily" Value="{StaticResource IconFontFamily}"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#B08D57"/>
             <Setter Property="VerticalAlignment" Value="Center"/>
         </Style>
     </Page.Resources>
@@ -61,7 +86,7 @@
                        Canvas.Top="24"
                        Text="The Sopranos - Character Management"
                        Foreground="#B08D57"
-                       FontFamily="Oswald"
+                       FontFamily="{StaticResource HeadingFontFamily}"
                        FontWeight="Bold"
                        FontSize="64"/>
 
@@ -176,11 +201,20 @@
                        FontSize="16"
                        Visibility="{Binding IsSelectionVisible, Converter={StaticResource BoolToVisibilityConverter}}"/>
 
-            <TextBlock Canvas.Left="100" Canvas.Top="{Binding HeaderTextTop}" Text="Character" Style="{StaticResource HeaderTextStyle}"/>
-            <TextBlock Canvas.Left="600" Canvas.Top="{Binding HeaderTextTop}" Text="Role" Style="{StaticResource HeaderTextStyle}"/>
-            <TextBlock Canvas.Left="900" Canvas.Top="{Binding HeaderTextTop}" Text="Image" Style="{StaticResource HeaderTextStyle}"/>
-            <TextBlock Canvas.Left="1200" Canvas.Top="{Binding HeaderTextTop}" Text="Added" Style="{StaticResource HeaderTextStyle}"/>
-            <TextBlock Canvas.Left="1550" Canvas.Top="{Binding HeaderTextTop}" Text="Actions" Style="{StaticResource HeaderTextStyle}"/>
+            <TextBlock Canvas.Left="100" Canvas.Top="{Binding HeaderIconTop}" Style="{StaticResource HeaderIconStyle}" Text="{StaticResource IconCharacterGlyph}"/>
+            <TextBlock Canvas.Left="124" Canvas.Top="{Binding HeaderTextTop}" Text="Character" Style="{StaticResource HeaderTextStyle}"/>
+
+            <TextBlock Canvas.Left="600" Canvas.Top="{Binding HeaderIconTop}" Style="{StaticResource HeaderIconStyle}" Text="{StaticResource IconRoleGlyph}"/>
+            <TextBlock Canvas.Left="622" Canvas.Top="{Binding HeaderTextTop}" Text="Role" Style="{StaticResource HeaderTextStyle}"/>
+
+            <TextBlock Canvas.Left="900" Canvas.Top="{Binding HeaderIconTop}" Style="{StaticResource HeaderIconStyle}" Text="{StaticResource IconImageGlyph}"/>
+            <TextBlock Canvas.Left="924" Canvas.Top="{Binding HeaderTextTop}" Text="Image" Style="{StaticResource HeaderTextStyle}"/>
+
+            <TextBlock Canvas.Left="1200" Canvas.Top="{Binding HeaderIconTop}" Style="{StaticResource HeaderIconStyle}" Text="{StaticResource IconAddedGlyph}"/>
+            <TextBlock Canvas.Left="1222" Canvas.Top="{Binding HeaderTextTop}" Text="Added" Style="{StaticResource HeaderTextStyle}"/>
+
+            <TextBlock Canvas.Left="1550" Canvas.Top="{Binding HeaderIconTop}" Style="{StaticResource HeaderIconStyle}" Text="{StaticResource IconActionsGlyph}"/>
+            <TextBlock Canvas.Left="1572" Canvas.Top="{Binding HeaderTextTop}" Text="Actions" Style="{StaticResource HeaderTextStyle}"/>
 
             <ItemsControl Canvas.Left="10" Canvas.Top="{Binding RowsTop}" Width="1900" ItemsSource="{Binding Characters}">
                 <ItemsControl.ItemsPanel>
@@ -195,7 +229,16 @@
                 </ItemsControl.ItemContainerStyle>
                 <ItemsControl.ItemTemplate>
                     <DataTemplate>
-                        <Border Width="1900" Height="56" Background="#1F1F1F" BorderBrush="#4F4F4F" BorderThickness="1">
+                        <Border Width="1900" Height="56" Background="#1F1F1F" BorderBrush="#4F4F4F" BorderThickness="1" Opacity="0">
+                            <Border.Triggers>
+                                <EventTrigger RoutedEvent="Border.Loaded">
+                                    <BeginStoryboard>
+                                        <Storyboard>
+                                            <DoubleAnimation Storyboard.TargetProperty="Opacity" From="0" To="1" Duration="0:0:0.22"/>
+                                        </Storyboard>
+                                    </BeginStoryboard>
+                                </EventTrigger>
+                            </Border.Triggers>
                             <Canvas>
                                 <CheckBox Canvas.Left="20"
                                           Canvas.Top="16"
@@ -209,11 +252,8 @@
                                 <TextBlock Canvas.Left="90"
                                            Canvas.Top="11"
                                            Text="{Binding FullName}"
-                                           Foreground="#C8A96B"
-                                           FontFamily="Segoe UI"
-                                           FontWeight="SemiBold"
-                                           FontSize="20"
-                                           Cursor="Hand"
+                                           Style="{StaticResource CharacterNameHyperlinkStyle}"
+                                           ToolTip="Open character (Edit for Admin, Details for Visitor)"
                                            MouseLeftButtonUp="CharacterNameTextBlock_MouseLeftButtonUp"/>
 
                                 <TextBlock Canvas.Left="590"
@@ -236,15 +276,15 @@
                                            FontWeight="Regular"
                                            FontSize="16"/>
 
-                                <TextBlock Canvas.Left="1540"
+                                <TextBlock Canvas.Left="1538"
                                            Canvas.Top="11"
-                                           Text="View"
-                                           Foreground="#C8A96B"
-                                           FontFamily="Segoe UI"
-                                           FontWeight="Regular"
-                                           FontSize="20"
-                                           Cursor="Hand"
-                                           MouseLeftButtonUp="ViewTextBlock_MouseLeftButtonUp"/>
+                                           Style="{StaticResource ActionHyperlinkStyle}"
+                                            FontSize="18"
+                                           ToolTip="Open details"
+                                           MouseLeftButtonUp="ViewTextBlock_MouseLeftButtonUp">
+                                    <Run FontFamily="{StaticResource IconFontFamily}" FontSize="14" BaselineAlignment="Center" Text="{StaticResource IconViewGlyph}"/>
+                                    <Run Text="  View"/>
+                                </TextBlock>
                             </Canvas>
                         </Border>
                     </DataTemplate>

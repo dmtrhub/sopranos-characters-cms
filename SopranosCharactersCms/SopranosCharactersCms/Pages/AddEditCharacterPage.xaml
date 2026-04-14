@@ -200,8 +200,8 @@
             <TextBlock x:Name="ImagePathTextBlock" Canvas.Left="40" Canvas.Top="778" Text="No image selected" FontFamily="Segoe UI" FontWeight="Regular" FontSize="11" Foreground="#8B8985"/>
             <TextBlock x:Name="ImageErrorTextBlock" Canvas.Left="40" Canvas.Top="794" Text="" FontFamily="Segoe UI" FontWeight="Regular" FontSize="11" Foreground="#D65C5C"/>
 
-            <TextBlock Canvas.Left="40" Canvas.Top="791" Text="Character Description File (RTF) *" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#F5E6C8"/>
-            <Border Canvas.Left="40" Canvas.Top="821" Width="350" Height="44" CornerRadius="4" Background="Transparent" BorderBrush="#B08D57" BorderThickness="2">
+            <TextBlock Canvas.Left="40" Canvas.Top="821" Text="Character Description File (RTF) *" FontFamily="Segoe UI" FontWeight="Bold" FontSize="14" Foreground="#F5E6C8"/>
+            <Border Canvas.Left="40" Canvas.Top="851" Width="350" Height="44" CornerRadius="4" Background="Transparent" BorderBrush="#B08D57" BorderThickness="2">
                 <Button x:Name="BrowseRtfButton"
                         Style="{StaticResource SecondaryButtonStyle}"
                         Content="[Browse...]"
@@ -214,8 +214,8 @@
                         Cursor="Hand"
                         Click="BrowseRtfButton_Click"/>
             </Border>
-            <TextBlock x:Name="RtfStatusTextBlock" Canvas.Left="40" Canvas.Top="871" Text="No file selected" FontFamily="Segoe UI" FontWeight="Regular" FontSize="12" Foreground="#8B8985"/>
-            <TextBlock x:Name="RtfErrorTextBlock" Canvas.Left="40" Canvas.Top="892" Text="" FontFamily="Segoe UI" FontWeight="Regular" FontSize="11" Foreground="#D65C5C"/>
+            <TextBlock x:Name="RtfStatusTextBlock" Canvas.Left="40" Canvas.Top="901" Text="No file selected" FontFamily="Segoe UI" FontWeight="Regular" FontSize="12" Foreground="#8B8985"/>
+            <TextBlock x:Name="RtfErrorTextBlock" Canvas.Left="40" Canvas.Top="922" Text="" FontFamily="Segoe UI" FontWeight="Regular" FontSize="11" Foreground="#D65C5C"/>
             <TextBox x:Name="RtfPathTextBox" Visibility="Collapsed"/>
 
             <Border Canvas.Left="420" Canvas.Top="150" Width="600" Height="50" CornerRadius="4" Background="#1F1F1F" BorderBrush="#4F4F4F" BorderThickness="1"/>
@@ -241,8 +241,8 @@
 
             <ComboBox x:Name="FontSizeComboBox" Canvas.Left="740" Canvas.Top="155" Width="80" Height="40" Style="{StaticResource ToolbarComboBoxStyle}" SelectionChanged="FontSizeComboBox_SelectionChanged" Cursor="Hand"/>
 
-            <Border Canvas.Left="830" Canvas.Top="155" Width="64" Height="40" Background="#2A2A2A" BorderBrush="#4F4F4F" BorderThickness="1"/>
-            <ComboBox x:Name="FontColorComboBox" Canvas.Left="830" Canvas.Top="155" Width="64" Height="40" Style="{StaticResource ToolbarComboBoxStyle}" ItemTemplate="{StaticResource ToolbarColorTemplate}" SelectionChanged="FontColorComboBox_SelectionChanged" Cursor="Hand" Padding="0" HorizontalContentAlignment="Center" VerticalContentAlignment="Center">
+            <Border Canvas.Left="830" Canvas.Top="155" Width="170" Height="40" Background="#2A2A2A" BorderBrush="#4F4F4F" BorderThickness="1"/>
+            <ComboBox x:Name="FontColorComboBox" Canvas.Left="830" Canvas.Top="155" Width="170" Height="40" Style="{StaticResource ToolbarComboBoxStyle}" ItemTemplate="{StaticResource ColorTemplate}" SelectionChanged="FontColorComboBox_SelectionChanged" Cursor="Hand" Padding="8,0,0,0" HorizontalContentAlignment="Left" VerticalContentAlignment="Center">
                 <ComboBox.ToolTip>
                     Font color
                 </ComboBox.ToolTip>
