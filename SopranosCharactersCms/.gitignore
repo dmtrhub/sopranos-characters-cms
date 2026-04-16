@@ -1,9 +1,11 @@
 # Visual Studio and IDE cache
 .vs/
+**/.vs/
 .vscode/
 *.user
 *.suo
 *.sln.docstates
+*.vsidx
 
 # Build output
 bin/
@@ -22,3 +24,4 @@ packages/
 # OS files
 .DS_Store
 Thumbs.db
+.github/copilot-instructions.md

@@ -8,6 +8,7 @@ using System.Windows.Controls;
 using System.Windows;
 using System.Windows.Navigation;
 using System.Windows.Media.Effects;
+using System.Windows.Media;
 
 namespace SopranosCharactersCms
 {
@@ -19,7 +20,7 @@ namespace SopranosCharactersCms
         {
             InitializeComponent();
 
-            EnterFullscreen();
+            ExitFullscreen();
             PreviewKeyDown += MainWindow_PreviewKeyDown;
 
             DataService = new AppDataService();
@@ -63,6 +64,12 @@ namespace SopranosCharactersCms
             WindowState = WindowState.Normal;
             WindowStyle = WindowStyle.SingleBorderWindow;
             ResizeMode = ResizeMode.CanResize;
+
+            double horizontalChrome = (SystemParameters.ResizeFrameVerticalBorderWidth * 2) + (SystemParameters.BorderWidth * 2);
+            double verticalChrome = (SystemParameters.ResizeFrameHorizontalBorderHeight * 2) + SystemParameters.CaptionHeight + (SystemParameters.BorderWidth * 2);
+
+            Width = 1920 + horizontalChrome;
+            Height = 1080 + verticalChrome;
         }
 
         public AppDataService DataService { get; }
@@ -115,17 +122,19 @@ namespace SopranosCharactersCms
                 return;
             }
 
+            bool openFullscreen = _isFullscreen;
+
             Window detailsWindow = new Window
             {
                 Owner = this,
                 Title = "Character Details",
                 Width = ActualWidth,
                 Height = ActualHeight,
-                WindowStyle = WindowStyle.None,
-                ResizeMode = ResizeMode.NoResize,
                 WindowStartupLocation = WindowStartupLocation.CenterOwner,
-                WindowState = WindowState.Maximized,
-                Background = (System.Windows.Media.Brush)new System.Windows.Media.BrushConverter().ConvertFromString("#0A0A0A"),
+                WindowStyle = openFullscreen ? WindowStyle.None : WindowStyle.SingleBorderWindow,
+                ResizeMode = openFullscreen ? ResizeMode.NoResize : ResizeMode.CanResize,
+                WindowState = openFullscreen ? WindowState.Maximized : WindowState.Normal,
+                Background = TryFindResource("BackgroundMainBrush") as Brush ?? Brushes.Black,
                 Content = new Frame
                 {
                     NavigationUIVisibility = NavigationUIVisibility.Hidden,

@@ -61,7 +61,6 @@
     <Compile Include="Pages\LoginFigmaPage.xaml.cs">
       <DependentUpon>LoginFigmaPage.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Pages\LoginPage.xaml.cs" />
     <Compile Include="Services\AppDataService.cs" />
     <Compile Include="Services\XmlDataService.cs" />
     <Compile Include="SopranosCharactersCms\Dialogs\ConfirmationDialogWindow.xaml.cs">
@@ -90,9 +89,6 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Pages\LoginFigmaPage.xaml">
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Pages\LoginPage.xaml">
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="SopranosCharactersCms\Dialogs\ConfirmationDialogWindow.xaml">

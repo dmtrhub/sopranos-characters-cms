@@ -256,53 +256,17 @@
             <TextBlock Canvas.Left="420" Canvas.Top="465" x:Name="WordCountTextBlock" Text="Words: 0" FontFamily="Segoe UI" FontWeight="Regular" FontSize="12" Foreground="#B8B5AE"/>
             <TextBlock x:Name="DescriptionErrorTextBlock" Canvas.Left="420" Canvas.Top="463" Width="600" Text="" TextAlignment="Right" FontFamily="Segoe UI" FontWeight="Regular" FontSize="11" Foreground="#D65C5C"/>
 
-            <Border Canvas.Left="420" Canvas.Top="975" Width="200" Height="48" CornerRadius="6" BorderThickness="1">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="#7A1E1E"/>
-                        <Setter Property="BorderBrush" Value="#7A1E1E"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#922626"/>
-                                <Setter Property="BorderBrush" Value="#922626"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
+            <Border Canvas.Left="420" Canvas.Top="975" Width="200" Height="48" CornerRadius="6" BorderThickness="1" Style="{StaticResource PrimaryActionBorderStyle}">
                 <Button x:Name="SaveButton"
-                        Style="{StaticResource NoBlueButtonBaseStyle}"
+                        Style="{StaticResource PrimaryActionButtonStyle}"
                         Content="Save"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="#F5E6C8"
-                        FontFamily="Segoe UI"
-                        FontWeight="Bold"
-                        FontSize="14"
-                        Cursor="Hand"
                         Click="SaveButton_Click"/>
             </Border>
 
-            <Border Canvas.Left="630" Canvas.Top="975" Width="200" Height="48" CornerRadius="6" BorderBrush="#B08D57" BorderThickness="2">
-                <Border.Style>
-                    <Style TargetType="Border">
-                        <Setter Property="Background" Value="Transparent"/>
-                        <Style.Triggers>
-                            <Trigger Property="IsMouseOver" Value="True">
-                                <Setter Property="Background" Value="#F2C94C"/>
-                            </Trigger>
-                        </Style.Triggers>
-                    </Style>
-                </Border.Style>
+            <Border Canvas.Left="630" Canvas.Top="975" Width="200" Height="48" CornerRadius="6" BorderBrush="{StaticResource GoldPrimaryBrush}" BorderThickness="2" Style="{StaticResource SecondaryActionBorderStyle}">
                 <Button x:Name="CancelButton"
-                        Style="{StaticResource NoBlueButtonBaseStyle}"
+                        Style="{StaticResource SecondaryActionButtonStyle}"
                         Content="Cancel"
-                        Background="Transparent"
-                        BorderThickness="0"
-                        Foreground="#B08D57"
-                        FontFamily="Segoe UI"
-                        FontWeight="Bold"
-                        FontSize="14"
-                        Cursor="Hand"
                         Click="CancelButton_Click"/>
             </Border>
         </Canvas>

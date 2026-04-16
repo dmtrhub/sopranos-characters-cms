@@ -22,6 +22,7 @@ namespace SopranosCharactersCms.Pages
         private string _selectedImageSourcePath;
         private string _loadedRtfSourcePath;
         private ObservableCollection<ColorOption> _colorOptions;
+        private bool _isUpdatingToolbarFromSelection;
 
         public AddEditCharacterPage(MainWindow mainWindow, User currentUser, CharacterContent editingCharacter)
         {
@@ -363,31 +364,60 @@ namespace SopranosCharactersCms.Pages
 
         private void DescriptionRichTextBox_SelectionChanged(object sender, RoutedEventArgs e)
         {
-            object fontWeight = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
-            BoldToggleButton.IsChecked = fontWeight != DependencyProperty.UnsetValue && fontWeight.Equals(FontWeights.Bold);
+            _isUpdatingToolbarFromSelection = true;
 
-            object fontStyle = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
-            ItalicToggleButton.IsChecked = fontStyle != DependencyProperty.UnsetValue && fontStyle.Equals(FontStyles.Italic);
-
-            object textDecorations = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
-            UnderlineToggleButton.IsChecked = textDecorations != DependencyProperty.UnsetValue && textDecorations.Equals(TextDecorations.Underline);
-
-            object fontFamily = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontFamilyProperty);
-            if (fontFamily != DependencyProperty.UnsetValue)
+            try
             {
-                FontFamilyComboBox.SelectedItem = fontFamily;
+                object fontWeight = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontWeightProperty);
+                BoldToggleButton.IsChecked = fontWeight != DependencyProperty.UnsetValue && fontWeight.Equals(FontWeights.Bold);
+
+                object fontStyle = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontStyleProperty);
+                ItalicToggleButton.IsChecked = fontStyle != DependencyProperty.UnsetValue && fontStyle.Equals(FontStyles.Italic);
+
+                object textDecorations = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.TextDecorationsProperty);
+                UnderlineToggleButton.IsChecked = HasUnderline(textDecorations) || IsUnderlineAtCaret();
+
+                object fontFamily = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontFamilyProperty);
+                if (fontFamily != DependencyProperty.UnsetValue)
+                {
+                    FontFamilyComboBox.SelectedItem = fontFamily;
+                }
+
+                object fontSize = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontSizeProperty);
+                if (fontSize != DependencyProperty.UnsetValue)
+                {
+                    double parsedFontSize = (double)fontSize;
+                    FontSizeComboBox.SelectedItem = FontSizeComboBox.Items.Cast<double>().OrderBy(value => Math.Abs(value - parsedFontSize)).FirstOrDefault();
+                }
+
+                object foreground = DescriptionRichTextBox.Selection.GetPropertyValue(TextElement.ForegroundProperty);
+                if (foreground == DependencyProperty.UnsetValue)
+                {
+                    FontColorComboBox.SelectedItem = null;
+                }
+                else
+                {
+                    SolidColorBrush selectedBrush = foreground as SolidColorBrush;
+                    ColorOption matchedColor = selectedBrush == null
+                        ? null
+                        : _colorOptions.FirstOrDefault(option => ((SolidColorBrush)option.Brush).Color == selectedBrush.Color);
+
+                    FontColorComboBox.SelectedItem = matchedColor;
+                }
             }
-
-            object fontSize = DescriptionRichTextBox.Selection.GetPropertyValue(Inline.FontSizeProperty);
-            if (fontSize != DependencyProperty.UnsetValue)
+            finally
             {
-                double parsedFontSize = (double)fontSize;
-                FontSizeComboBox.SelectedItem = FontSizeComboBox.Items.Cast<double>().OrderBy(value => Math.Abs(value - parsedFontSize)).FirstOrDefault();
+                _isUpdatingToolbarFromSelection = false;
             }
         }
 
         private void FontFamilyComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isUpdatingToolbarFromSelection)
+            {
+                return;
+            }
+
             if (FontFamilyComboBox.SelectedItem == null)
             {
                 return;
@@ -397,8 +427,48 @@ namespace SopranosCharactersCms.Pages
             DescriptionRichTextBox.Focus();
         }
 
+        private static bool HasUnderline(object textDecorations)
+        {
+            if (textDecorations == null || textDecorations == DependencyProperty.UnsetValue)
+            {
+                return false;
+            }
+
+            TextDecorationCollection collection = textDecorations as TextDecorationCollection;
+            if (collection == null)
+            {
+                string rawValue = textDecorations.ToString();
+                return !string.IsNullOrWhiteSpace(rawValue) && rawValue.IndexOf("Underline", StringComparison.OrdinalIgnoreCase) >= 0;
+            }
+
+            return collection.Any(decoration => decoration.Location == TextDecorationLocation.Underline);
+        }
+
+        private bool IsUnderlineAtCaret()
+        {
+            if (!DescriptionRichTextBox.Selection.IsEmpty)
+            {
+                return false;
+            }
+
+            TextPointer caret = DescriptionRichTextBox.CaretPosition;
+            Inline backwardInline = caret.GetAdjacentElement(LogicalDirection.Backward) as Inline;
+            if (backwardInline != null && HasUnderline(backwardInline.TextDecorations))
+            {
+                return true;
+            }
+
+            Inline forwardInline = caret.GetAdjacentElement(LogicalDirection.Forward) as Inline;
+            return forwardInline != null && HasUnderline(forwardInline.TextDecorations);
+        }
+
         private void FontSizeComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isUpdatingToolbarFromSelection)
+            {
+                return;
+            }
+
             if (!(FontSizeComboBox.SelectedItem is double selectedSize))
             {
                 return;
@@ -410,6 +480,11 @@ namespace SopranosCharactersCms.Pages
 
         private void FontColorComboBox_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
+            if (_isUpdatingToolbarFromSelection)
+            {
+                return;
+            }
+
             if (!(FontColorComboBox.SelectedItem is ColorOption selectedColorOption))
             {
                 return;
